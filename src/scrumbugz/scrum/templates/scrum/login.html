@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "bootstrap/forms/macros.html" import field, non_field_errors %}
+
+
+{% block nav_main %}
+{% endblock nav_main %}
+
+{% block content %}
+<div class="row">
+	<div class="span4 offset4">
+		<h1>Login Form</h1>
+		<form action="{{ request.get_full_path() }}"
+			  class="form-horizontal"
+			  method="post">
+			{{ csrf() }}
+			{{ non_field_errors(form) }}
+			{% for f in form -%}
+			{{ field(f) }}
+			{%- endfor %}
+			<button style="float: right"class="btn btn-primary" type="submit">Login</button>
+		</form>
+	</div>
+</div>
+{% endblock %}
+

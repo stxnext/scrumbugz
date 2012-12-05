@@ -1,0 +1,275 @@
+body {
+    padding-bottom: 40px;
+    padding-top: 50px;
+}
+
+div.row {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav{
+    padding: 8px 0;
+}
+
+.modal .modal-form {
+    margin-bottom: 0;
+}
+
+dl.sprint-numbers dd {
+    font-size: 26pt;
+    font-style: italic;
+    line-height: 1em;
+    margin-left: 1em;
+    margin-bottom: .5em;
+}
+
+dl.sprint-numbers dt {
+    font-size: 14pt;
+    line-height: 1em;
+    border-bottom: 2px solid #ccc;
+}
+
+#tooltip {
+    position: absolute;
+    display: none;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    opacity: 0.95;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    line-height: 1.5em;
+}
+
+table thead .type-int,
+table thead .type-float,
+table thead .type-string,
+table thead .type-priority {
+    background-image: url(../img/bg.gif);
+    background-repeat: no-repeat;
+    background-position: center left;
+    cursor: pointer;
+    padding-left: 21px;
+}
+
+table thead tr .headerSortUp {
+    background-image: url(../img/asc.gif);
+    background-color: rgb(221, 221, 221);
+}
+
+table thead tr .headerSortDown {
+    background-image: url(../img/desc.gif);
+    background-color: rgb(221, 221, 221);
+}
+
+/* For the details, see: http://flowplayer.org/tools/dateinput/index.html#skinning */
+
+/* calendar root element */
+#calroot {
+    /* place on top of other elements. set a higher value if nessessary */
+    z-index:10000;
+
+    margin-top:-1px;
+    width:198px;
+    padding:2px;
+    background-color:#fff;
+    font-size:11px;
+    border:1px solid #ccc;
+
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+
+    -moz-box-shadow: 0 0 15px #666;
+    -webkit-box-shadow: 0 0 15px #666;
+}
+
+/* head. contains title, prev/next month controls and possible month/year selectors */
+#calhead {
+    padding:2px 0;
+    height:22px;
+}
+
+#caltitle {
+    font-size:14px;
+    color:#0150D1;
+    float:left;
+    text-align:center;
+    width:155px;
+    line-height:20px;
+    text-shadow:0 1px 0 #ddd;
+}
+
+#calnext, #calprev {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../img/glyphicons-halflings.png");
+    background-position: -432px -72px;
+    background-repeat: no-repeat;
+    *margin-right: .3em;
+}
+#calnext:last-child, #calprev:last-child {
+    *margin-left: 0;
+}
+
+#calnext, #calprev {
+    display:block;
+    width:20px;
+    height:20px;
+    float:left;
+    cursor:pointer;
+}
+
+#calnext {
+    float:right;
+    background-position: -456px -72px;
+}
+
+#calprev.caldisabled, #calnext.caldisabled {
+    visibility:hidden;
+}
+
+/* year/month selector */
+#caltitle select {
+    font-size:10px;
+}
+
+/* names of the days */
+#caldays {
+    height:14px;
+    border-bottom:1px solid #ddd;
+}
+
+#caldays span {
+    display:block;
+    float:left;
+    width:28px;
+    text-align:center;
+}
+
+/* container for weeks */
+#calweeks {
+    background-color:#fff;
+    margin-top:4px;
+}
+
+/* single week */
+.calweek {
+    clear:left;
+    height:22px;
+}
+
+/* single day */
+.calweek a {
+    display:block;
+    float:left;
+    width:27px;
+    height:20px;
+    text-decoration:none;
+    font-size:11px;
+    margin-left:1px;
+    text-align:center;
+    line-height:20px;
+    color:#666;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+}
+
+/* different states */
+.calweek a:hover, .calfocus {
+    background-color:#ddd;
+}
+
+/* sunday */
+a.calsun {
+    color:red;
+}
+
+/* offmonth day */
+a.caloff {
+    color:#ccc;
+}
+
+a.caloff:hover {
+    background-color:rgb(245, 245, 250);
+}
+
+
+/* unselecteble day */
+a.caldisabled {
+    background-color:#efefef !important;
+    color:#ccc	!important;
+    cursor:default;
+}
+
+/* current day */
+#calcurrent {
+    background-color:#498CE2;
+    color:#fff;
+}
+
+/* today */
+#caltoday {
+    background-color:#333;
+    color:#fff;
+}
+
+.btn.pull-right {
+    margin-left: 4px;
+}
+
+.storylist {
+    margin-left: 0;
+}
+
+.storylist li {
+    cursor: move;
+    list-style-type: none;
+    padding: 3px 5px;
+    background-color: #ececec;
+    margin: 2px 0;
+}
+
+.storylist .story_points {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.woot {
+    color: #468847;
+}
+
+.offscreen-hide {
+    position:absolute;
+    left:-9999px;
+}
+
+tr.active td {
+    background-color: #dff0d8 !important;
+}
+
+.act-toggle-sprint i {
+    background-position: -216px -120px;
+}
+
+.toggle-graphs-label {
+    position: relative;
+    right: 5px;
+    top: 5px;
+}
+
+.blocked-bug {
+    cursor: pointer;
+}
+
+.navbar-fixed-top {
+    opacity: .9;
+}
+
+.browserid-login {
+    padding-top: 7.5px !important;
+    padding-bottom: 7.5px !important;
+}

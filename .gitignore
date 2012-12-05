@@ -12,3 +12,13 @@ settings/local.py
 _coverage/*
 .noseids
 celerybeat-schedule
+.idea
+var
+parts
+eggs
+bin
+develop-eggs
+*.egg-info
+.installed.cfg
+.mr.developer.cfg
+src/scrumbugz/settings/local.py

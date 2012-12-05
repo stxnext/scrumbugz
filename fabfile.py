@@ -1,43 +1,41 @@
-from fabric.api import local, env
+from __future__ import with_statement
+from fabric.api import *
+from fabric.operations import put
+from fabric.contrib import files
+import os
+import string
 
+def raphael():
+    """
+    DEVELOPMENT
+    """
+    env.hosts = ['krotkiewicz@raphael.stxnext.pl',]
+    env.directory = '~/scrumbugz'
 
-env.git_remote = 'dev'
+def reload_supervisord():
+    run('./bin/supervisorctl -c parts/etc/supervisord.conf update')
+    run('./bin/supervisorctl -c parts/etc/supervisord.conf restart all')
 
+def start_supervisord():
+     with cd(env.directory):
+         run('./bin/supervisord -c parts/etc/supervisord.conf')
 
-def prod():
-    env.git_remote = 'prod'
-
-
-def heroku(cmd):
-    local("heroku run '{0}' --remote {1}".format(cmd, env.git_remote))
-
-
-def heroku_django(cmd):
-    heroku("python manage.py {0}".format(cmd))
-
-
-def deploy():
-    push()
-    collect_static()
-    syncdb()
-
-
-def push():
-    local('git push {0} master'.format(env.git_remote))
-
+def db_migrate():
+    run('./bin/manage migrate --noinput')
 
 def collect_static():
-    heroku_django('collectstatic --noinput')
+    run('./bin/manage collectstatic --noinput')
 
+def buildout():
+    run('./bin/buildout -vNc production.cfg')
 
-def syncdb():
-    heroku_django('syncdb')
-    heroku_django('migrate')
-
-
-def cron(command):
-    heroku_django('cron {0}'.format(command))
-
-
-def clear_cache():
-    cron('clear_cache')
+def upgrade(branch=None):
+    with cd(env.directory):
+        if branch:
+            run('git remote update')
+            run('git checkout %s' % branch)
+        run('git pull')
+        buildout()
+        db_migrate()
+        collect_static()
+        reload_supervisord()

@@ -1,0 +1,107 @@
+{% macro toggle_stats_button(off=False) -%}
+  <div class="pull-right">
+    <div class="btn-group pull-right stats-toggle" data-toggle="buttons-radio">
+      <button class="btn stats-on{{ ' active' if not off }}">On</button>
+      <button class="btn stats-off{{ ' active' if off }}">Off</button>
+    </div>
+    <strong class="toggle-graphs-label">Pretty Graphs:</strong>
+  </div>
+{% endmacro %}
+
+{% macro left_nav(name, items, active=None) -%}
+  <ul class="nav nav-list">
+    <li class="nav-header">
+      {% if name.lower() == 'projects' %}
+        <i class="icon-briefcase"></i>
+      {% elif name.lower() == 'teams' %}
+        <i class="icon-user"></i>
+      {% endif %}
+      {{ name }}
+    </li>
+    {% for i in items %}
+      <li{% if i == active %} class="active"{% endif %}>
+        <a href="{{ i.get_absolute_url() }}">{{ i.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{%- endmacro %}
+
+{% macro bug_table(bugs, id='bugs_table', actions=None, button_color=None, show_project=True, show_sprint=False, blocked_bugs=None) %}
+  {%- set actions=[actions] if actions is string -%}
+  {%- set status_to_rowclass = {'closed': 'success', 'open': 'warning'} -%}
+  {% if button_color -%}
+    {%- set icon_color=' icon-white' -%}
+  {%- else -%}
+    {%- set icon_color='' -%}
+  {%- endif -%}
+  <table class="table table-bordered table-hover table-condensed bug-list{{ ' empty' if not bugs }} stupidtable" id="{{ id }}">
+    <thead>
+      <tr>
+        <th class="type-int">ID</th>
+        {% if show_project %}
+          <th class="type-string">Project</th>
+        {% endif %}
+        {% if show_sprint %}
+          <th class="type-string">Sprint</th>
+        {% endif %}
+        <th class="type-priority">Priority</th>
+        <th>Summary</th>
+        <th class="type-string">Assigned</th>
+        <th class="type-string">User</th>
+        <th class="type-string">Component</th>
+        <th class="type-int">Points</th>
+        <th class="type-float">Hours Worked</th>
+        <th class="type-string">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bug in bugs %}
+        {% set class='' %}
+        {% if bug.is_unassigned %}{% set class='warning' %}{% endif %}
+        <tr data-bugid="{{ bug.id }}" data-points="{{ bug.story_points }}" id="bug{{ bug.id }}" class="bug-{{ bug.basic_status }} {{ status_to_rowclass[bug.basic_status] }} {{ class }}">
+          <td data-order-by="{{ bug.id }}"><a href="{{ bug.get_absolute_url() }}">{{ bug.id }}</a></td>
+          {% if show_project %}
+            <td data-order-by="{{ bug.project }}">{% if bug.project %}<a href="{{ bug.project.get_absolute_url() }}">{{ bug.project }}</a>{% endif %}</td>
+          {% endif %}
+          {% if show_sprint %}
+            <td data-order-by="{{ bug.sprint.slug }}">{% if bug.sprint %}<a href="{{ bug.sprint.get_absolute_url() }}">{{ bug.sprint.name }}</a>{% endif %}</td>
+          {% endif %}
+          <td data-order-by="{{ bug.priority if bug.priority != '--' else 'z' }}">{{ bug.priority if bug.priority != '--' }}</td>
+          <td>{% if blocked_bugs and bug.id in blocked_bugs %}<span class="label label-important blocked-bug">BLOCKED<span class="hide blocker-links">{{ bug_links(blocked_bugs[bug.id]) }}</span></span> {% endif %}{{ bug.summary }}</td>
+          <td class="ttip" title="{{ bug.assigned_full }}">{{ bug.assigned_name }}</td>
+          <td>{{ bug.story_user }}</td>
+          <td>{{ bug.component }}</td>
+          <td>{{ bug.story_points }}</td>
+          <td>{{ bug.actual_time | round(method='ceil') | int }}</td>
+          <td>{{ bug.status }}</td>
+          <td width="1">
+            {% if actions %}
+              {% for action in actions %}
+                <a class="btn btn-mini{{ ' btn-' + button_color if button_color }} act-{{ action }}"><i class="{{ icon_color }}"></i></a>
+              {% endfor %}
+            {% else %}
+              <a class="btn btn-mini{{ ' btn-' + button_color if button_color }}" href="{{ BUGZILLA_FILE_URL }}blocked={{ bug.id }}&product={{ bug.product }}&component={{ bug.component }}" title="Add Blocking Bug"><i class="icon-ban-circle{{ icon_color }}"></i></a>
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        {% set num_cols = 8 %}
+        {% if show_sprint %}
+          {% set num_cols = num_cols + 1 %}
+        {% endif %}
+        {% if show_project %}
+          {% set num_cols = num_cols + 1 %}
+        {% endif %}
+        <tr class="empty_message">
+          <td colspan="{{ num_cols }}">No bugs so far.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
+
+{% macro bug_links(bug_objs) %}
+  {%- for bug in bug_objs -%}
+    <a href="{{ bug.get_absolute_url() }}" class="ttip" target="_blank" title="{{ bug.summary }}">{{ bug.id }}</a>{{ ', ' if not loop.last }}
+  {%- endfor -%}
+{% endmacro %}
